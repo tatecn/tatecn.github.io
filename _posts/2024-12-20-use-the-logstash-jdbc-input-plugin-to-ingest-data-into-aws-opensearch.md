@@ -6,10 +6,10 @@ tags: [logstash,jdbc input plugin,logstash-output-opensearch]
 description: How to index document for geo_shape field using logstash jdbc input.
 ---
 
-# Background
+## 0. Background
 It is common to synchronize data in real-time from RDBMS (such as MySQL) to OpenSearch(or Elasticsearch) using Logstash. This blog documents the process and provides key considerations, particularly for the `geo_shape` field.
 
-# 1. Prepare Your Database
+## 1. Prepare Your Database
 Ensure your database table contains geometric data in a supported format, such as GeoJSON. I will use `geo_shape_demo` as table name and index name. Example:
 
 ```sql
@@ -51,7 +51,7 @@ insert into geo_shape_demo (jd_no,job_geo_bounds) values ('1814625742831620096',
 }');
 ```
 
-# 2. Define the Elasticsearch Index Mapping
+## 2. Define the Elasticsearch Index Mapping
 
 ```json
 PUT /geo_shape_demo
@@ -71,7 +71,7 @@ PUT /geo_shape_demo
   }
 }
 ```
-# 3. Download logstash with logstash-output-opensearch plugin
+## 3. Download logstash with logstash-output-opensearch plugin
 If you use AWS OpenSearch service you could download 
 
 [https://artifacts.opensearch.org/logstash/logstash-oss-with-opensearch-output-plugin-8.9.0-linux-x64.tar.gz](https://artifacts.opensearch.org/logstash/logstash-oss-with-opensearch-output-plugin-8.9.0-linux-x64.tar.gz)
@@ -82,7 +82,7 @@ Please select the correct version of the Logstash `logstash-output-opensearch` p
 
 You can also install this plugin separately if you already have a Logstash service.
 
-# 4. Configure Logstash Pipeline
+## 4. Configure Logstash Pipeline
 Set up your Logstash configuration file (pipeline.conf) to read from the database and index into OpenSearch.
 
 ```ruby
@@ -125,14 +125,15 @@ output {
       stdout { codec =>  "rubydebug"}
 }
 ```
-# 5. Run Logstash
+## 5. Run Logstash
 Start Logstash with the configuration file:
 ```bash
 bin/logstash -f pipeline.conf
 ```
 
-# 6. Tips
-## 1) Remember to add a `JSON` filter plugin; otherwise, you may encounter a `parse_exception`.
+## 6. Tips
+### 6.1 parse_exception
+Remember to add a `JSON` filter plugin; otherwise, you may encounter a `parse_exception`.
 
 ```ruby
 filter {
@@ -155,7 +156,8 @@ filter {
 >  "reason"=>"expected **word** but found: **'{'**" <br>
 >}
 
-## 2) Typically, you may want to use a `long` number to store a `timestamp` field in both the database and OpenSearch, as `millisecond` precision is sometimes required.
+### 6.2 timestamp field
+Typically, you may want to use a `long` number to store a `timestamp` field in both the database and OpenSearch, as `millisecond` precision is sometimes required.
 In MySQL/MariaDB, the `UNIX_TIMESTAMP` function returns a floating-point number (instead of the expected integer) when the input is a timestamp field with millisecond precision. Since timestamp fields are stored in scientific notation within the index, you need to use the `FLOOR` function to convert the float to an integer.
 
 **Reference links:**
