@@ -3,7 +3,7 @@ title: Use the logstash jdbc input plugin to ingest data into aws opensearch
 date: 2024-12-20 19:06:00 +0800
 categories: [AWS, OpenSearch]
 tags: [logstash,jdbc input plugin,logstash-output-opensearch]
-description: How to index document for geo_shape field using logstash jdbc input.
+description: How to index a document for a geo_shape field using the Logstash JDBC input when encountering an "expected word but found '{'" exception. 
 ---
 
 ## 0. Background
