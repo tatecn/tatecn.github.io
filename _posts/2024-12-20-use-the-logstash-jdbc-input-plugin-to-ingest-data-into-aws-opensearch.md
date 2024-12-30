@@ -1,5 +1,5 @@
 ---
-title: use-the-logstash-jdbc-input-plugin-to-ingest-data-into-aws-opensearch
+title: Use the logstash jdbc input plugin to ingest data into aws opensearch
 date: 2024-12-20 19:06:00 +0800
 categories: [AWS, OpenSearch]
 tags: [logstash,jdbc input plugin,logstash-output-opensearch]
